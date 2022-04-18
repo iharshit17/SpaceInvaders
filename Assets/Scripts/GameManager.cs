@@ -7,17 +7,17 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
     public MapLimits limits;
-    public GameObject enemy1;
-    public GameObject enemy2;
-    public GameObject enemy3;
-    public GameObject powerUp;
-    public GameObject powerDown;
-    public float spawnTimer;
-    float maxTimer;
-    public float spawnPowerTimer;
-    float maxPowerTimer;
-    int enemynum;
-    public PlayerController player;
+    [SerializeField] private GameObject enemy1;
+    [SerializeField] private GameObject enemy2;
+    [SerializeField] private GameObject enemy3;
+    [SerializeField] private GameObject powerUp;
+    [SerializeField] private GameObject powerDown;
+    [SerializeField] private float spawnTimer;
+    private float maxTimer;
+    [SerializeField] private float spawnPowerTimer;
+    private float maxPowerTimer;
+    private int enemynum;
+    [SerializeField] private PlayerController player;
 
     void Start ()
     {
@@ -27,14 +27,14 @@ public class GameManager : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
-        spawnTimer -= Time.deltaTime;
+	void FixedUpdate () {
+        spawnTimer -= Time.fixedDeltaTime;
         if(spawnTimer <= 0)
         {
             SpawnEnemy();
             spawnTimer = maxTimer;
         }
-        spawnPowerTimer -= Time.deltaTime;
+        spawnPowerTimer -= Time.fixedDeltaTime;
         if(spawnPowerTimer <= 0)
         {
             SpawnPowers();
@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour {
 
     void GameOver()
      {
-         if(player.hp <= 0)
+         if(player.HP <= 0)
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
      }
 }

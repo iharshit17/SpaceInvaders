@@ -1,20 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class DestroyTimer : MonoBehaviour {
-
-    public float timer;
-    public GameObject particle;
-	// Use this for initialization
-	void Start () {
-		
-	}
+public class DestroyTimer : MonoBehaviour 
+{
+    [SerializeField] private float destroyTimer;
+    [SerializeField] private GameObject particle;
 	
-	// Update is called once per frame
-	void Update () {
-        timer -= Time.deltaTime;
-        if(timer <= 0)
+	void FixedUpdate () 
+    {
+        destroyTimer -= Time.fixedDeltaTime;
+        if(destroyTimer <= 0)
         {
             if(particle)
                 Instantiate(particle, transform.position, transform.rotation);

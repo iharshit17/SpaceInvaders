@@ -14,12 +14,29 @@ public class EnemyController : MonoBehaviour {
     public float shotPower;
     float shotTimer;
     float maxshotTimer;
-    public int hp;
+    private int _hp = 100;
+    public int HP
+    {
+        get => _hp;
+        set
+        {
+            if (_hp <= 0)
+            {
+                int randomNumber = Random.Range(0, 100);
+                if (randomNumber < 30) Instantiate(powerup, transform.position, powerup.transform.rotation);
+                if (randomNumber > 80) Instantiate(powerdown, transform.position, powerdown.transform.rotation);
+                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().score += scoreReward;
+                Destroy(gameObject);
+            }
+            _hp = value;
+        }
+    }
     public GameObject powerup;
     public GameObject powerdown;
     Rigidbody rig;
     public bool changeDirection;
     // Use this for initialization
+
 	void Start () {
         rig = GetComponent<Rigidbody>();
         maxTimer = changeTimer;
@@ -74,22 +91,15 @@ public class EnemyController : MonoBehaviour {
         {
             Destroy(col.gameObject);
             Instantiate(particleEffect, transform.position, transform.rotation);
-            hp--;
-            if (hp <= 0)
-            {
-                int randomNumber = Random.Range(0, 100);
-                if (randomNumber < 30) Instantiate(powerup, transform.position, powerup.transform.rotation);
-                if (randomNumber > 80) Instantiate(powerdown, transform.position, powerdown.transform.rotation);
-                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().score += scoreReward;
-                Destroy(gameObject);
-            }
+            HP--;
+            
         }
         if (col.gameObject.tag == "Player")
         {
-            col.gameObject.GetComponent<PlayerController>().hp--;
+            col.gameObject.GetComponent<PlayerController>().HP--;
             Instantiate(particleEffect, transform.position, transform.rotation);
-            hp--;
-            if (hp <= 0)
+            HP--;
+            if (HP <= 0)
             {
                 col.gameObject.GetComponent<PlayerController>().score += scoreReward;
                 Destroy(gameObject);

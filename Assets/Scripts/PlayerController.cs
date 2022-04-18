@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
@@ -11,7 +12,22 @@ public class PlayerController : MonoBehaviour {
     public Transform posL;
     public Transform posR;
     public GameObject particleEffect;
-    public int hp;
+    private int _hp = 100;
+    public int HP
+    {
+        get => _hp;
+        set
+        {
+            if (_hp <= 0)
+            {
+                Destroy(gameObject);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+
+            }
+            _hp = value;
+        }
+    }
+
     public int score;
     public Text scoreText;
     public MapLimits Limits;
@@ -27,8 +43,6 @@ public class PlayerController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (hp <= 0)
-            Destroy(gameObject);
         Movement();
         Shooting();
         scoreText.text = score.ToString();
@@ -42,15 +56,15 @@ public class PlayerController : MonoBehaviour {
         {
             transform.Translate(new Vector3(0, movementSpeed * Time.deltaTime, 0));
         }
-        if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
         {
             transform.Translate(new Vector3(0, -movementSpeed * Time.deltaTime, 0));
         }
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
             transform.Translate(new Vector3(movementSpeed * Time.deltaTime, 0, 0));
         }
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+        else if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
             transform.Translate(new Vector3(-movementSpeed * Time.deltaTime, 0, 0));
         }
@@ -104,18 +118,18 @@ public class PlayerController : MonoBehaviour {
                 power++;
             Destroy(col.gameObject);
         }
-        if (col.gameObject.tag == "powerDown")
+        else if (col.gameObject.tag == "powerDown")
         {
             if(power > 1) 
                 power--;
             Destroy(col.gameObject);
         }
-        if (col.gameObject.tag == "enemyBullet")
+        else if (col.gameObject.tag == "enemyBullet")
         {
             Destroy(col.gameObject);
             Instantiate(particleEffect, transform.position, transform.rotation);
-            hp--;
-            if (hp <= 0)
+            HP--;
+            if (HP <= 0)
             {
                 Destroy(gameObject);
             }
